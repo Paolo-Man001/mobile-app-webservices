@@ -7,6 +7,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("users")   // http://localhost:8080/users
 public class UserController {
 
+   // Get All User. Optional Query-String Request Params
+   // Optional Params for page
+   @GetMapping
+   public String getUsers(@RequestParam(value = "page") int page,
+                          @RequestParam(value = "limit") int limit) {
+      return "getUsers() was called... with @Request Parameters - 'page'=" + page + " and 'limit'=" + limit + ".";
+   }
+
    // Get A User
    @GetMapping(path = "/{userId}")
    public String getUser(@PathVariable String userId) {
