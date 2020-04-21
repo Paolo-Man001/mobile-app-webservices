@@ -10,9 +10,10 @@ public class UserController {
    // Get All User. Optional Query-String Request Params
    // Optional Params for page
    @GetMapping
-   public String getUsers(@RequestParam(value = "page") int page,
-                          @RequestParam(value = "limit") int limit) {
-      return "getUsers() was called... with @Request Parameters - 'page'=" + page + " and 'limit'=" + limit + ".";
+   public String getUsers(@RequestParam(value = "page", defaultValue = "1") int page,
+                          @RequestParam(value = "limit", defaultValue = "50") int limit,
+                          @RequestParam(value = "sort", defaultValue = "desc", required = false) String sort) {
+      return "getUsers() was called... with @Request Parameters - 'page'=" + page + ",'limit'=" + limit + ", and 'sort'=" + sort + ".";
    }
 
    // Get A User
