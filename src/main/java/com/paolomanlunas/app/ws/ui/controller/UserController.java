@@ -43,15 +43,15 @@ public class UserController {
                    MediaType.APPLICATION_XML_VALUE,
                    MediaType.APPLICATION_JSON_VALUE})
    public ResponseEntity<UserRest> getUser(@PathVariable String userId) {
+
+      /* FOR Exception Testing/Debugging :: Uncomment next 2 lines */
+//      String firstName = null;
+//      int firstNameLength = firstName.length();
+
       if (usersMap.containsKey(userId))
          return new ResponseEntity<>(usersMap.get(userId), HttpStatus.OK);
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
-//      UserRest returnUserValue = new UserRest();
-//      returnUserValue.setEmail("email@eamil.com");
-//      returnUserValue.setFirstName("James");
-//      returnUserValue.setLastName("Bond");
-//      return new ResponseEntity<>(returnUserValue, HttpStatus.OK);
    }
 
 
