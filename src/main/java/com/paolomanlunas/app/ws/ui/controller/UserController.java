@@ -8,11 +8,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 
 @RestController            // register class as Controller
 @RequestMapping("users")   // http://localhost:8080/users
 public class UserController {
+
+   /* MAP<> is used to temporarily store User-record in-memory
+    *  to use to Update the Details. in-memory data will
+    *  be erased when app is restarted.
+    *  */
+   Map<String, UserRest> usersMap;
+
 
    /* Get All User. Optional Query-String Request Params
     * */
@@ -33,12 +43,15 @@ public class UserController {
                    MediaType.APPLICATION_JSON_VALUE
            })
    public ResponseEntity<UserRest> getUser(@PathVariable String userId) {
-      UserRest returnUserValue = new UserRest();
-      returnUserValue.setEmail("email@eamil.com");
-      returnUserValue.setFirstName("James");
-      returnUserValue.setLastName("Bond");
+      if (usersMap.containsKey(userId))
+         return new ResponseEntity<>(usersMap.get(userId), HttpStatus.OK);
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
-      return new ResponseEntity<>(returnUserValue, HttpStatus.OK);
+//      UserRest returnUserValue = new UserRest();
+//      returnUserValue.setEmail("email@eamil.com");
+//      returnUserValue.setFirstName("James");
+//      returnUserValue.setLastName("Bond");
+//      return new ResponseEntity<>(returnUserValue, HttpStatus.OK);
    }
 
 
@@ -58,6 +71,13 @@ public class UserController {
       returnUserValue.setFirstName(userDetails.getFirstName());
       returnUserValue.setLastName(userDetails.getLastName()
       );
+
+
+      String userId = UUID.randomUUID().toString();
+      returnUserValue.setUserId(userId);        // sets UUID as UserId
+
+      if (usersMap == null) usersMap = new HashMap<>();
+      usersMap.put(userId, returnUserValue);    // temp-save into usersMap-HashMap<'userId'-KEY, returnUserValue-VALUE>
 
       return new ResponseEntity<>(returnUserValue, HttpStatus.OK);
    }
