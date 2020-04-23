@@ -1,5 +1,6 @@
 package com.paolomanlunas.app.ws.ui.controller;
 
+import com.paolomanlunas.app.ws.ui.model.request.UserDetailsRequestModel;
 import com.paolomanlunas.app.ws.ui.model.response.UserRest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
    /* Get All User. Optional Query-String Request Params
-   * */
+    * */
    @GetMapping
    public String getUsers(@RequestParam(value = "page", defaultValue = "1") int page,
                           @RequestParam(value = "limit", defaultValue = "50") int limit,
@@ -34,15 +35,29 @@ public class UserController {
       returnUserValue.setEmail("email@eamil.com");
       returnUserValue.setFirstName("James");
       returnUserValue.setLastName("Bond");
+
       return new ResponseEntity<>(returnUserValue, HttpStatus.OK);
    }
 
+
    /* Create a User:
-   *  Set to accept + read JSON Body
-   * */
-   @PostMapping
-   public String createUser() {
-      return "createUser() was called.";
+    *  Set to accept + read JSON Body
+    * */
+   @PostMapping(consumes = {
+           MediaType.APPLICATION_XML_VALUE,
+           MediaType.APPLICATION_JSON_VALUE},
+           produces = {
+                   MediaType.APPLICATION_XML_VALUE,
+                   MediaType.APPLICATION_JSON_VALUE
+           })
+   public ResponseEntity<UserRest> createUser(@RequestBody UserDetailsRequestModel userDetails) {
+      UserRest returnUserValue = new UserRest();
+      returnUserValue.setEmail(userDetails.getEmail());
+      returnUserValue.setFirstName(userDetails.getFirstName());
+      returnUserValue.setLastName(userDetails.getLastName()
+      );
+
+      return new ResponseEntity<>(returnUserValue, HttpStatus.OK);
    }
 
    @PutMapping
