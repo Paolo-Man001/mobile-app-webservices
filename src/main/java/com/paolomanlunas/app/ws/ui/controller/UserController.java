@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("users")   // http://localhost:8080/users
 public class UserController {
 
-   // Get All User. Optional Query-String Request Params
+   /* Get All User. Optional Query-String Request Params
+   * */
    @GetMapping
    public String getUsers(@RequestParam(value = "page", defaultValue = "1") int page,
                           @RequestParam(value = "limit", defaultValue = "50") int limit,
@@ -19,9 +20,10 @@ public class UserController {
       return "getUsers() was called... with @Request Parameters - 'page'=" + page + ",'limit'=" + limit + ", and 'sort'=" + sort + ".";
    }
 
-   // Get A User
-   // SET MediaType to return type of both JSON or XML
-   // ResponseEntity<UserRest> is used to enable return of custom HttpStatus
+   /* Get A User:
+    * SET MediaType to return type of both JSON or XML
+    * ResponseEntity<UserRest> is used to enable return of custom HttpStatus
+    * */
    @GetMapping(path = "/{userId}",
            produces = {
                    MediaType.APPLICATION_XML_VALUE,
@@ -35,6 +37,9 @@ public class UserController {
       return new ResponseEntity<>(returnUserValue, HttpStatus.OK);
    }
 
+   /* Create a User:
+   *  Set to accept + read JSON Body
+   * */
    @PostMapping
    public String createUser() {
       return "createUser() was called.";
