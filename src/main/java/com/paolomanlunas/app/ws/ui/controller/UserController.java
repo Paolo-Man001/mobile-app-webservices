@@ -1,5 +1,6 @@
 package com.paolomanlunas.app.ws.ui.controller;
 
+import com.paolomanlunas.app.ws.ui.model.request.UpdateUserDetailsRequestModel;
 import com.paolomanlunas.app.ws.ui.model.request.UserDetailsRequestModel;
 import com.paolomanlunas.app.ws.ui.model.response.UserRest;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,7 @@ public class UserController {
    Map<String, UserRest> usersMap;
 
 
-   /* Get All User. Optional Query-String Request Params
+   /* GET All User. Optional Query-String Request Params
     * */
    @GetMapping
    public String getUsers(@RequestParam(value = "page", defaultValue = "1") int page,
@@ -33,15 +34,14 @@ public class UserController {
       return "getUsers() was called... with @Request Parameters - 'page'=" + page + ",'limit'=" + limit + ", and 'sort'=" + sort + ".";
    }
 
-   /* Get A User:
+   /* GET A User:
     * SET MediaType to return type of both JSON or XML
     * ResponseEntity<UserRest> is used to enable return of custom HttpStatus
     * */
    @GetMapping(path = "/{userId}",
            produces = {
                    MediaType.APPLICATION_XML_VALUE,
-                   MediaType.APPLICATION_JSON_VALUE
-           })
+                   MediaType.APPLICATION_JSON_VALUE})
    public ResponseEntity<UserRest> getUser(@PathVariable String userId) {
       if (usersMap.containsKey(userId))
          return new ResponseEntity<>(usersMap.get(userId), HttpStatus.OK);
@@ -55,7 +55,7 @@ public class UserController {
    }
 
 
-   /* Create a User:
+   /* CREATE a User:
     *  Set to accept + read JSON Body
     * */
    @PostMapping(consumes = {
@@ -63,15 +63,13 @@ public class UserController {
            MediaType.APPLICATION_JSON_VALUE},
            produces = {
                    MediaType.APPLICATION_XML_VALUE,
-                   MediaType.APPLICATION_JSON_VALUE
-           })
+                   MediaType.APPLICATION_JSON_VALUE})
    public ResponseEntity<UserRest> createUser(@Valid @RequestBody UserDetailsRequestModel userDetails) {
       UserRest returnUserValue = new UserRest();
       returnUserValue.setEmail(userDetails.getEmail());
       returnUserValue.setFirstName(userDetails.getFirstName());
       returnUserValue.setLastName(userDetails.getLastName()
       );
-
 
       String userId = UUID.randomUUID().toString();
       returnUserValue.setUserId(userId);        // sets UUID as UserId
@@ -82,11 +80,30 @@ public class UserController {
       return new ResponseEntity<>(returnUserValue, HttpStatus.OK);
    }
 
-   @PutMapping
-   public String updateUser() {
-      return "updateUser() was called.";
+
+   /* UPDATE a User:
+    *  Setup exactly the same as Create User.
+    * */
+   @PutMapping(path = "/{userId}",
+           consumes = {
+                   MediaType.APPLICATION_XML_VALUE,
+                   MediaType.APPLICATION_JSON_VALUE},
+           produces = {
+                   MediaType.APPLICATION_XML_VALUE,
+                   MediaType.APPLICATION_JSON_VALUE})
+   public UserRest updateUser(@PathVariable String userId,
+                              @Valid @RequestBody UpdateUserDetailsRequestModel userDetails) {
+      UserRest storedUserDetails = usersMap.get(userId);
+      storedUserDetails.setFirstName(userDetails.getFirstName());
+      storedUserDetails.setLastName(userDetails.getLastName());
+      usersMap.put(userId, storedUserDetails);
+
+      return storedUserDetails;
    }
 
+
+   /*  DELETE a User:
+    * */
    @DeleteMapping
    public String deleteUser() {
       return "deleteUser() was called.";
