@@ -1,5 +1,6 @@
 package com.paolomanlunas.app.ws.ui.controller;
 
+import com.paolomanlunas.app.ws.exceptions.UserServiceException;
 import com.paolomanlunas.app.ws.ui.model.request.UpdateUserDetailsRequestModel;
 import com.paolomanlunas.app.ws.ui.model.request.UserDetailsRequestModel;
 import com.paolomanlunas.app.ws.ui.model.response.UserRest;
@@ -48,8 +49,14 @@ public class UserController {
    public ResponseEntity<UserRest> getUser(@PathVariable String userId) {
 
       /* FOR Exception Testing/Debugging :: Uncomment next 2 lines */
-      String firstName = null;
-      int firstNameLength = firstName.length();
+      /*String firstName = null;
+      int firstNameLength = firstName.length();*/
+
+      /* Custom Exception Using 'UserServiceException'
+       *    Comment Out UserServiceException after testing.
+       * */
+      if (true) throw new UserServiceException("A User Service Exception is thrown");
+
 
       if (usersMap.containsKey(userId))
          return new ResponseEntity<>(usersMap.get(userId), HttpStatus.OK);
