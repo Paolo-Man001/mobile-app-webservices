@@ -34,10 +34,13 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 
 
    /**
-    * NullPointerException.class is a SPECIFIC Exception
+    * HandleSpecificExceptions.class is a COMBINED Exceptions(Specific and Custom)
+    *    COMBINES both NullPointerException and UserServiceException(Custom)
+    *    with ONE ExceptionHandler Method. NOTICE 1st Arg changed back to 'Exception' to handle
+    *    multiple-types of Exceptions separated by comma ",".
     */
-   @ExceptionHandler(value = {NullPointerException.class})
-   public ResponseEntity<Object> handleNullPointerException(NullPointerException ex, WebRequest request) {
+   @ExceptionHandler(value = {NullPointerException.class, UserServiceException.class})
+   public ResponseEntity<Object> handleSpecificExceptions(Exception ex, WebRequest request) {
 
       String errorMessageDescription = ex.getLocalizedMessage();
       // check if error message is null:
@@ -49,22 +52,4 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
       return new ResponseEntity<>(
               errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
    }
-
-   /**
-    * UserServiceException.class is a CUSTOM Exception
-    */
-   @ExceptionHandler(value = {UserServiceException.class})
-   public ResponseEntity<Object> handleUserServiceException(UserServiceException ex, WebRequest request) {
-
-      String errorMessageDescription = ex.getLocalizedMessage();
-      // check if error message is null:
-      if (errorMessageDescription == null) errorMessageDescription = ex.toString();
-      // Use Custom ErrorMessage Class
-      ErrorMessage errorMessage = new ErrorMessage(new Date(), errorMessageDescription);
-
-      // ResponseEntity of type = Object( as Body of Http Response )
-      return new ResponseEntity<>(
-              errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
-   }
-
 }
