@@ -6,6 +6,15 @@ public class ErrorMessage {
    private Date timestamp;
    private String message;
 
+   public ErrorMessage() {
+   }
+
+   public ErrorMessage(Date timestamp, String message) {
+      this.timestamp = timestamp;
+      this.message = message;
+   }
+
+   /* PROPS */
    public Date getTimestamp() {
       return timestamp;
    }

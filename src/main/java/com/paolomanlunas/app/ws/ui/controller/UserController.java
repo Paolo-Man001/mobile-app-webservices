@@ -45,8 +45,8 @@ public class UserController {
    public ResponseEntity<UserRest> getUser(@PathVariable String userId) {
 
       /* FOR Exception Testing/Debugging :: Uncomment next 2 lines */
-//      String firstName = null;
-//      int firstNameLength = firstName.length();
+      String firstName = null;
+      int firstNameLength = firstName.length();
 
       if (usersMap.containsKey(userId))
          return new ResponseEntity<>(usersMap.get(userId), HttpStatus.OK);
