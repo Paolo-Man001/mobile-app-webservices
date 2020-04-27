@@ -1,18 +1,30 @@
 package com.paolomanlunas.app.ws.userservice.impl;
 
+import com.paolomanlunas.app.ws.shared.Utils;
 import com.paolomanlunas.app.ws.ui.model.request.UserDetailsRequestModel;
 import com.paolomanlunas.app.ws.ui.model.response.UserRest;
 import com.paolomanlunas.app.ws.userservice.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 
 @Service
 public class UserServiceImpl implements UserService {
    Map<String, UserRest> usersMap;
+
+   private Utils utils;
+
+   public UserServiceImpl() {
+   }
+
+   @Autowired
+   public UserServiceImpl(Utils utils) {
+      this.utils = utils;
+   }
+
 
    @Override
    public UserRest createUser(UserDetailsRequestModel userDetails) {
@@ -22,7 +34,8 @@ public class UserServiceImpl implements UserService {
       returnUserValue.setLastName(userDetails.getLastName()
       );
 
-      String userId = UUID.randomUUID().toString();
+      // @Autowired Utils.class DI to generate UUID
+      String userId = utils.generateUserId();
       returnUserValue.setUserId(userId);        // sets UUID as UserId
 
       if (usersMap == null) usersMap = new HashMap<>();

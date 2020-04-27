@@ -1,6 +1,5 @@
 package com.paolomanlunas.app.ws.ui.controller;
 
-import com.paolomanlunas.app.ws.exceptions.UserServiceException;
 import com.paolomanlunas.app.ws.ui.model.request.UpdateUserDetailsRequestModel;
 import com.paolomanlunas.app.ws.ui.model.request.UserDetailsRequestModel;
 import com.paolomanlunas.app.ws.ui.model.response.UserRest;
@@ -12,9 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 
 @RestController            // register class as Controller
