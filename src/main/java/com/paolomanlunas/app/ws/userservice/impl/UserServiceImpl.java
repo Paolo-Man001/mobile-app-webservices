@@ -17,6 +17,7 @@ public class UserServiceImpl implements UserService {
 
    private Utils utils;
 
+   // CONSTRUCTOR empty: empty-const won't require Utils to be final :
    public UserServiceImpl() {
    }
 
