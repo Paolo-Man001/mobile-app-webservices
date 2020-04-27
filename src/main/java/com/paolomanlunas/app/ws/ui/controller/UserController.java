@@ -81,12 +81,10 @@ public class UserController {
            produces = {
                    MediaType.APPLICATION_XML_VALUE,
                    MediaType.APPLICATION_JSON_VALUE})
-   public ResponseEntity<UserRest> createUser(@Valid @RequestBody UserDetailsRequestModel userDetails) {
-
+   public ResponseEntity<UserRest> createUser(
+           @Valid @RequestBody UserDetailsRequestModel userDetails) {
       /* Original Business-Logic was move/converted into UserServiceImpl(Implementation) to Autowire */
-      UserRest returnUserValue = userService.createUser(userDetails);
-
-      return new ResponseEntity<>(returnUserValue, HttpStatus.OK);
+      return new ResponseEntity<>(userService.createUser(userDetails), HttpStatus.OK);
    }
 
 
@@ -101,14 +99,10 @@ public class UserController {
            produces = {
                    MediaType.APPLICATION_XML_VALUE,
                    MediaType.APPLICATION_JSON_VALUE})
-   public UserRest updateUser(@PathVariable String userId,
-                              @Valid @RequestBody UpdateUserDetailsRequestModel userDetails) {
-      UserRest storedUserDetails = usersMap.get(userId);
-      storedUserDetails.setFirstName(userDetails.getFirstName());
-      storedUserDetails.setLastName(userDetails.getLastName());
-      usersMap.put(userId, storedUserDetails);
-
-      return storedUserDetails;
+   public UserRest updateUser(
+           @PathVariable String userId,
+           @Valid @RequestBody UpdateUserDetailsRequestModel userDetails) {
+      return userService.updateUser(userId, userDetails);
    }
 
 
