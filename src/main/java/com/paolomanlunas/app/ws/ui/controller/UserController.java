@@ -4,6 +4,8 @@ import com.paolomanlunas.app.ws.exceptions.UserServiceException;
 import com.paolomanlunas.app.ws.ui.model.request.UpdateUserDetailsRequestModel;
 import com.paolomanlunas.app.ws.ui.model.request.UserDetailsRequestModel;
 import com.paolomanlunas.app.ws.ui.model.response.UserRest;
+import com.paolomanlunas.app.ws.userservice.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,13 @@ public class UserController {
     * be erased when app is restarted.
     */
    Map<String, UserRest> usersMap;
+
+   private final UserService userService;
+
+   @Autowired
+   public UserController(UserService userService) {
+      this.userService = userService;
+   }
 
 
    /**
@@ -49,19 +58,18 @@ public class UserController {
    public ResponseEntity<UserRest> getUser(@PathVariable String userId) {
 
       /* FOR Exception Testing/Debugging :: Uncomment next 2 lines */
-      /*String firstName = null;
-      int firstNameLength = firstName.length();*/
+//      String firstName = null;
+//      int firstNameLength = firstName.length();
 
       /* Custom Exception Using 'UserServiceException'
        *    Comment Out UserServiceException after testing.
        * */
-      if (true) throw new UserServiceException("A User Service Exception is thrown");
+//      if (true) throw new UserServiceException("A User Service Exception is thrown");
 
 
       if (usersMap.containsKey(userId))
          return new ResponseEntity<>(usersMap.get(userId), HttpStatus.OK);
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
    }
 
 
@@ -69,24 +77,17 @@ public class UserController {
     * CREATE a User:
     * Set to accept + read JSON Body
     */
-   @PostMapping(consumes = {
-           MediaType.APPLICATION_XML_VALUE,
-           MediaType.APPLICATION_JSON_VALUE},
+   @PostMapping(
+           consumes = {
+                   MediaType.APPLICATION_XML_VALUE,
+                   MediaType.APPLICATION_JSON_VALUE},
            produces = {
                    MediaType.APPLICATION_XML_VALUE,
                    MediaType.APPLICATION_JSON_VALUE})
    public ResponseEntity<UserRest> createUser(@Valid @RequestBody UserDetailsRequestModel userDetails) {
-      UserRest returnUserValue = new UserRest();
-      returnUserValue.setEmail(userDetails.getEmail());
-      returnUserValue.setFirstName(userDetails.getFirstName());
-      returnUserValue.setLastName(userDetails.getLastName()
-      );
 
-      String userId = UUID.randomUUID().toString();
-      returnUserValue.setUserId(userId);        // sets UUID as UserId
-
-      if (usersMap == null) usersMap = new HashMap<>();
-      usersMap.put(userId, returnUserValue);    // temp-save into usersMap-HashMap<'userId'-KEY, returnUserValue-VALUE>
+      /* Original Business-Logic was move/converted into UserServiceImpl(Implementation) to Autowire */
+      UserRest returnUserValue = userService.createUser(userDetails);
 
       return new ResponseEntity<>(returnUserValue, HttpStatus.OK);
    }
